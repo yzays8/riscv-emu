@@ -1,6 +1,6 @@
 CC = g++
 TARGET = emu
-OBJS = main.o cpu.o
+OBJS = main.o cpu.o dram.o bus.o
 
 CXXFLAGS = -Wall -Wextra -std=c++2b
 

@@ -9,7 +9,12 @@ int main(int argc, char** argv) {
     std::exit(EXIT_FAILURE);
   }
 
-  auto cpu = std::make_unique<CPU>();
-  cpu->LoadProgram(argv[1]);
-  cpu->Run();
+  auto cpu = std::make_unique<CPU>(argv[1]);
+
+  std::cout << "Running..." << std::endl;
+  for(;;) {
+    cpu->PrintRegs();
+    uint64_t new_pc = cpu->Execute(cpu->Fetch());
+    cpu->SetPC(new_pc);
+  }
 }

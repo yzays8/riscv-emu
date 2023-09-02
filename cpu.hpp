@@ -4,6 +4,9 @@
 #include <array>
 #include <string>
 #include <vector>
+#include <memory>
+
+#include "bus.hpp"
 
 union DecodedType {
   uint32_t raw;
@@ -45,20 +48,16 @@ union DecodedType {
   static_assert(sizeof(u_type) == sizeof(uint32_t));
 };
 
-constexpr uint64_t kDramSize = static_cast<uint64_t>(1024 * 1024 * 128); // 128 MiB
-
 class CPU {
  public:
-  CPU();
-  void LoadProgram(const std::string& path);
-  void Run();
-
- private:
+  CPU(const std::string& prog_path);
   uint32_t Fetch();
-  void Execute(uint32_t instr);
+  uint64_t Execute(uint32_t instr);
+  void SetPC(uint64_t pc);
   void PrintRegs() const;
 
+ private:
   std::array<uint64_t, 32> regs_;
   uint64_t pc_;
-  std::vector<uint8_t> dram_;
+  std::unique_ptr<Bus> bus_;
 };
