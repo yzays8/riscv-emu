@@ -21,4 +21,5 @@ int main(int argc, char** argv) {
   }
 
   cpu->PrintRegs();
+  cpu->AssertRegEq(a0, 0x37, a1, 0x15);
 }

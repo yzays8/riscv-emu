@@ -70,6 +70,13 @@ union DecodedType {
   static_assert(sizeof(j_type) == sizeof(uint32_t));
 };
 
+enum RegisterABI {
+  zero, ra, sp, gp, tp, t0, t1, t2, s0, fp = 8, s1,
+  a0, a1, a2, a3, a4, a5,a6, a7, s2, s3,
+  s4, s5, s6, s7, s8, s9, s10, s11, t3, t4,
+  t5, t6
+};
+
 class CPU {
  public:
   CPU(const std::string& prog_path);
@@ -77,9 +84,11 @@ class CPU {
   uint64_t Execute(uint32_t instr);
   void SetPC(uint64_t pc);
   void PrintRegs() const;
+  template <class... Args> void AssertRegEq(Args... args) const;
 
  private:
   template <class T> T SignExtend(T val, int bits) const;
+  template <class... Args> void AssertRegEqHelper(RegisterABI reg, uint64_t val, Args... args) const;
 
   std::array<uint64_t, 32> regs_;
   uint64_t pc_;
@@ -94,4 +103,20 @@ T CPU::SignExtend(T val, int bits) const {
   }
   T msb_set = 1 << (bits - 1);
   return (val ^ msb_set) - msb_set;
+}
+
+template <class... Args>
+void CPU::AssertRegEq(Args... args) const {
+  AssertRegEqHelper(args...);
+}
+
+template <class... Args>
+void CPU::AssertRegEqHelper(RegisterABI reg, uint64_t val, Args... args) const {
+  if (regs_[reg] != val) {
+    std::cout << "Register x" << std::dec << reg << " is 0x" << std::hex << static_cast<int>(regs_[reg]) << ", expected 0x" << static_cast<int>(val) << std::endl;
+  }
+
+  if constexpr (sizeof...(args) > 0) {
+    AssertRegEqHelper(args...);
+  }
 }
