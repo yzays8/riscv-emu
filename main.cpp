@@ -16,5 +16,9 @@ int main(int argc, char** argv) {
     cpu->PrintRegs();
     uint64_t new_pc = cpu->Execute(cpu->Fetch());
     cpu->SetPC(new_pc);
+    if (new_pc == 0)
+      break;
   }
+
+  cpu->PrintRegs();
 }

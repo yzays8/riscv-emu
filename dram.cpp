@@ -33,7 +33,7 @@ uint64_t DRAM::Load(uint64_t addr, int size) const {
     std::exit(EXIT_FAILURE);
   }
   if ((addr < kDramBaseAddr) || (kDramBaseAddr + kDramSize <= addr)) {
-    std::cerr << "Invalid load address: " << addr << std::endl;
+    std::cerr << "Invalid load address: 0x" << std::hex << static_cast<int>(addr) << std::endl;
     std::exit(EXIT_FAILURE);
   }
 
@@ -41,7 +41,7 @@ uint64_t DRAM::Load(uint64_t addr, int size) const {
   uint64_t data = 0;
   const int kLoadBytes = size / 8;
   for (int i = 0; i < kLoadBytes; ++i) {
-    data |= static_cast<uint64_t>(dram_[dram_addr + i] << (8 * i));
+    data |= static_cast<uint64_t>(static_cast<uint64_t>(dram_[dram_addr + i]) << (8 * i));
   }
 
   return data;
@@ -49,18 +49,18 @@ uint64_t DRAM::Load(uint64_t addr, int size) const {
 
 void DRAM::Store(uint64_t addr, int size, uint64_t data) {
   if (size != 8 && size != 16 && size != 32 && size != 64) {
-    std::cerr << "Invalid load size: " << size << std::endl;
+    std::cerr << "Invalid store size: " << size << std::endl;
     std::exit(EXIT_FAILURE);
   }
   if ((addr < kDramBaseAddr) || (kDramBaseAddr + kDramSize <= addr)) {
-    std::cerr << "Invalid load address: " << addr << std::endl;
+    std::cerr << "Invalid store address: 0x" << std::hex << static_cast<int>(addr) << std::endl;
     std::exit(EXIT_FAILURE);
   }
 
   uint64_t dram_addr = addr - kDramBaseAddr;
   const int kLoadBytes = size / 8;
   for (int i = 0; i < kLoadBytes; ++i) {
-    data >>= 8;
     dram_[dram_addr + i] = static_cast<uint8_t>(data & 0xFF);
+    data >>= 8;
   }
 }
