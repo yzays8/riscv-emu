@@ -20,7 +20,7 @@ uint32_t CPU::Fetch() {
 uint64_t CPU::Execute(uint32_t instr) {
   DecodedType decoded = static_cast<DecodedType>(instr);
   uint8_t opcode = decoded.i_type.opcode; // i_type is just a random choice
-  // std::cout << "opcode: 0x" << std::hex << static_cast<int>(opcode) << ", 0b" << std::bitset<7>(opcode) << " |||" << std::endl;
+  // std::cout << "instr: 0x" << std::hex << static_cast<int>(instr) <<", opcode: 0x" << static_cast<int>(opcode) << ", 0b" << std::bitset<7>(opcode) << " |||" << std::endl;
 
   switch (opcode) {
   case 0b0000011:
@@ -296,8 +296,6 @@ uint64_t CPU::Execute(uint32_t instr) {
     return static_cast<uint64_t>(static_cast<int64_t>(pc_) + imm);
   }
   default:
-    if (opcode == 0b0000000)  // end of program
-      return 0;
     std::cerr << "Unknown opcode: 0b" << std::bitset<7>(opcode) << std::endl;
     std::exit(EXIT_FAILURE);
   }

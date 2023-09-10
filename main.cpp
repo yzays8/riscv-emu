@@ -37,7 +37,10 @@ int main(int argc, char** argv) {
   std::cout << "Running..." << std::endl;
   for(;;) {
     cpu->PrintRegs();
-    uint64_t new_pc = cpu->Execute(cpu->Fetch());
+    uint32_t instr = cpu->Fetch();
+    if (instr == 0)
+      break;
+    uint64_t new_pc = cpu->Execute(instr);
     cpu->SetPC(new_pc);
     if (new_pc == 0)
       break;

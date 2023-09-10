@@ -4,7 +4,7 @@ readonly TEST_DIR=test
 
 function make_bin() {
     for dir in $TEST_DIR/*; do
-        for f in $TEST_DIR/$dir/*; do
+        for f in $dir/*; do
             local file_ext=${f##*.}
             case $file_ext in
                 c)

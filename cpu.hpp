@@ -72,9 +72,9 @@ union DecodedType {
 
 enum RegisterABI {
   zero, ra, sp, gp, tp, t0, t1, t2, s0, fp = 8, s1,
-  a0, a1, a2, a3, a4, a5,a6, a7, s2, s3,
+  a0, a1, a2, a3, a4, a5, a6, a7, s2, s3,
   s4, s5, s6, s7, s8, s9, s10, s11, t3, t4,
-  t5, t6
+  t5, t6, pc,
 };
 
 class CPU {
@@ -112,8 +112,13 @@ void CPU::AssertRegEq(Args... args) const {
 
 template <class... Args>
 void CPU::AssertRegEqHelper(RegisterABI reg, uint64_t val, Args... args) const {
-  if (regs_[reg] != val) {
-    std::cout << "Register x" << std::dec << reg << " is 0x" << std::hex << static_cast<int>(regs_[reg]) << ", expected 0x" << static_cast<int>(val) << std::endl;
+  if (reg == pc) {
+    if (pc_ != val) {
+      std::cout << "PC is 0x" << std::hex << pc_ << ", expected 0x" << val << std::endl;
+      std::exit(EXIT_FAILURE);
+    }
+  } else if (regs_[reg] != val) {
+    std::cout << "Register x" << std::dec << reg << " is 0x" << std::hex << regs_[reg] << ", expected 0x" << val << std::endl;
     std::exit(EXIT_FAILURE);
   }
 
