@@ -33,3 +33,6 @@
 
 # Specific files
 emu
+test/*
+!test/*/*.s
+!test/*/*.c

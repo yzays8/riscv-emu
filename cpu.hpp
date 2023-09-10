@@ -114,6 +114,7 @@ template <class... Args>
 void CPU::AssertRegEqHelper(RegisterABI reg, uint64_t val, Args... args) const {
   if (regs_[reg] != val) {
     std::cout << "Register x" << std::dec << reg << " is 0x" << std::hex << static_cast<int>(regs_[reg]) << ", expected 0x" << static_cast<int>(val) << std::endl;
+    std::exit(EXIT_FAILURE);
   }
 
   if constexpr (sizeof...(args) > 0) {

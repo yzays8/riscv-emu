@@ -1,6 +1,6 @@
 CC = g++
 TARGET = emu
-OBJS = main.o cpu.o dram.o bus.o
+OBJS = main.o cpu.o dram.o bus.o test.o
 
 CXXFLAGS = -Wall -Wextra -std=c++2b
 
@@ -14,6 +14,10 @@ clean:
 .PHONY: run
 run:
 	./$(TARGET) $(FILE)
+
+.PHONY: test
+test:
+	./$(TARGET) -t
 
 $(TARGET): $(OBJS) Makefile
 	$(CC) $(OBJS) -o $@

@@ -1,12 +1,35 @@
+#include <unistd.h>
 #include <iostream>
 #include <memory>
 
 #include "cpu.hpp"
+#include "test.hpp"
 
 int main(int argc, char** argv) {
   if (argc != 2) {
-    std::cerr << "Usage: " << argv[0] << " <path to program>" << std::endl;
-    std::exit(EXIT_FAILURE);
+    std::cerr << "Usage: " << argv[0] << " [-t]\n"
+              << "       " << argv[0] << " <file_path>" << std::endl;
+    return 1;
+  }
+
+  bool do_test = false;
+  int opt;
+  while ((opt = getopt(argc, argv, "t")) != -1) {
+    switch (opt) {
+    case 't':
+      do_test = true;
+      break;
+    default:
+      std::cerr << "Usage: " << argv[0] << " [-t]\n"
+                << "       " << argv[0] << " <file_path>" << std::endl;
+      return 1;
+    }
+  }
+
+  if (do_test) {
+    auto test = std::make_unique<Test>();
+    test->Run();
+    return 0;
   }
 
   auto cpu = std::make_unique<CPU>(argv[1]);
@@ -21,5 +44,4 @@ int main(int argc, char** argv) {
   }
 
   cpu->PrintRegs();
-  cpu->AssertRegEq(a0, 0x37, a1, 0x15);
 }

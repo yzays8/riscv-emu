@@ -296,6 +296,8 @@ uint64_t CPU::Execute(uint32_t instr) {
     return static_cast<uint64_t>(static_cast<int64_t>(pc_) + imm);
   }
   default:
+    if (opcode == 0b0000000)  // end of program
+      return 0;
     std::cerr << "Unknown opcode: 0b" << std::bitset<7>(opcode) << std::endl;
     std::exit(EXIT_FAILURE);
   }
