@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+src/*.o
 
 # Precompiled Headers
 *.gch
@@ -33,6 +34,7 @@
 
 # Specific files
 emu
+src/emu
 test/*/*
 !test/*/*.s
 !test/*/*.c

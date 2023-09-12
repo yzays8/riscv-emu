@@ -6,6 +6,8 @@
 
 #include "cpu.hpp"
 
+extern const std::string kTestDir;
+
 class Test {
  public:
   Test();
@@ -17,7 +19,7 @@ class Test {
 
 template <class... Args>
 void Test::TestBin(const std::string& file_path, Args... args) {
-  auto cpu = std::make_unique<CPU>(file_path);
+  auto cpu = std::make_unique<CPU>(kTestDir + file_path);
 
   std::cout << "Testing " << file_path << " ..." << std::endl;
   for(;;) {
